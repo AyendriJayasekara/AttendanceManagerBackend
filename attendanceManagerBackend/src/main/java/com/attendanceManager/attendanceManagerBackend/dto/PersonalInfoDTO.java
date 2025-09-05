@@ -3,7 +3,8 @@ package com.attendanceManager.attendanceManagerBackend.dto;
 import java.util.Date;
 
 public class PersonalInfoDTO {
-    private String employeeId;
+
+    private String id;
     private String fullName;
     private String email;
     private String phone;
@@ -16,12 +17,12 @@ public class PersonalInfoDTO {
     private String address;
 
     // Getters and Setters
-    public String getEmployeeId() {
-        return employeeId;
+    public String getId() {
+        return id;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFullName() {

@@ -9,7 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface PersonalInfoRepository extends JpaRepository<PersonalInfo, String> {
-    Optional<PersonalInfo> findByEmployeeId(String employeeId);
-    List<PersonalInfo> findAllByEmployeeId(String employeeId);
-    Optional<PersonalInfo> findTopByOrderByIdAsc();
+
 }

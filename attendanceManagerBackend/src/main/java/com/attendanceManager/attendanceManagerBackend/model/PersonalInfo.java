@@ -9,9 +9,6 @@ public class PersonalInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
-    @Column(nullable = false)
-    private String employeeId;
     private String fullName;
     private String email;
     private String phone;
@@ -36,14 +33,6 @@ public class PersonalInfo {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
     }
 
     public String getFullName() {

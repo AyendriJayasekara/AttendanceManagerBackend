@@ -17,60 +17,57 @@ public class PersonalInfoController {
     private PersonalInfoService personalInfoService;
 
     @GetMapping
-    public ResponseEntity<?> getSelfPersonalInfo() {
+    public ResponseEntity<?> getPersonalInfo() {
         try {
-            PersonalInfoDTO personalInfo = personalInfoService.getSelfPersonalInfo();
+            PersonalInfoDTO personalInfo = personalInfoService.getPersonalInfo();
             return ResponseEntity.ok(personalInfo);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Personal information not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No personal information found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching personal information: " + e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> saveSelfPersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO) {
+    public ResponseEntity<?> createPersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO) {
         try {
-            PersonalInfoDTO savedInfo = personalInfoService.saveSelfPersonalInfo(personalInfoDTO);
+            PersonalInfoDTO savedInfo = personalInfoService.savePersonalInfo(personalInfoDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedInfo);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Error saving personal information: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating personal information: " + e.getMessage());
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateSelfPersonalInfo(@RequestBody PersonalInfoDTO personalInfoDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePersonalInfo(
+            @PathVariable String id,
+            @RequestBody PersonalInfoDTO personalInfoDTO) {
         try {
-            PersonalInfoDTO updatedInfo = personalInfoService.updateSelfPersonalInfo(personalInfoDTO);
+            PersonalInfoDTO updatedInfo = personalInfoService.updatePersonalInfo(id, personalInfoDTO);
             return ResponseEntity.ok(updatedInfo);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Personal information not found");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity
-                    .badRequest()
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Personal information not found: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error updating personal information: " + e.getMessage());
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deletePersonalInfo() {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePersonalInfo(@PathVariable String id) {
         try {
-            personalInfoService.deleteSelfPersonalInfo();
-            return ResponseEntity.ok("Personal information deleted successfully");
+            personalInfoService.deletePersonalInfo(id);
+            return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Personal information not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Personal information not found: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting personal information: " + e.getMessage());
         }
-    }
-
-    @DeleteMapping("/all")
-    public ResponseEntity<?> deleteAllPersonalInfo() {
-        personalInfoService.deleteAllPersonalInfo();
-        return ResponseEntity.ok("All personal information records deleted");
     }
 }
